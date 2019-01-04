@@ -1,0 +1,29 @@
+---
+
+version: '3'
+
+services:
+  storage:
+    image: redis:5
+    volumes:
+      - ./data:/data
+
+  api:
+    build: .
+    ports:
+      - 8080:8080
+    volumes:
+      - ./config/docker.yml:/code/config/config.yml
+      - ./lib:/code/lib
+      - ./fastquote.py:/code/fastquote.py
+    depends_on:
+      - storage
+
+#  ui:
+#    image: nginx:stable
+#    ports:
+#      - 5000:80
+#    volumes:
+#      - ./ui:/usr/share/nginx/html
+#    depends_on:
+#      - api
