@@ -1,6 +1,6 @@
 ---
 
-debug: True
+debug: False
 
 api:
   host: 0.0.0.0
