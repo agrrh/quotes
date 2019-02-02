@@ -5,51 +5,36 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed" rel="stylesheet">
+    <!-- <link href="https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans+Condensed:300" rel="stylesheet"> -->
+
     <link href="css/fastquote.css" rel="stylesheet">
   </head>
 
   <body>
+    <div class="navbar-bg">
 
-    <div class="navbar">
-      <h1><a href="#">Fastquote</a></h1>
-      <ul>
-        <li><a href="#">submit</a></li>
-        <li><a href="#">about</a></li>
-      </ul>
+      <div class="navbar">
+        <h1><a href="#home">FastQuote</a></h1>
+        <ul>
+          <li><a href="#add">submit</a></li>
+          <li><a href="#about">about</a></li>
+        </ul>
+      </div>
+
     </div>
 
-    <div class="quote">
-      <div class="meta">
-        <div class="author">Kisa</div>
-        <div class="date">02/02/2019</div>
-        <div class="id"><a href="#">#0001</a></div>
-      </div>
-      <div class="text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </div>
-    </div>
+    <div class="content">
 
-    <div class="quote">
-      <div class="meta">
-        <div class="author">Kisa</div>
-        <div class="date">02/02/2019</div>
-        <div class="id"><a href="#">#0001</a></div>
+      <div class="quote">
+        <div class="meta">
+          <div class="author">{{ author }}</div>
+          <div class="date">{{ date }}</div>
+          <div class="id"><a href="#quote{{ id }}">#{{ id }}</a></div>
+        </div>
+        <p class="text">{{ text }}</p>
       </div>
-      <div class="text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </div>
-    </div>
 
-    <div class="quote">
-      <div class="meta">
-        <div class="author">Kisa</div>
-        <div class="date">02/02/2019</div>
-        <div class="id"><a href="#">#0001</a></div>
-      </div>
-      <div class="text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-      </div>
     </div>
-
   </body>
 </html>
