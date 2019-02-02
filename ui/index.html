@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>FastQuote</title>
+
+    <!-- Styles -->
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Condensed" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+    <link href="css/fastquote.css" rel="stylesheet">
+
+    <!-- Scripts -->
+
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+
+    <script src="js/fastquote.js"></script>
+  </head>
+
+  <body>
+    <div class="navbar-bg">
+
+      <div class="navbar">
+        <h1><a href="#home"><i class="fa fa-inbox"></i>FastQuote</a></h1>
+        <ul>
+          <li><a href="#add"><i class="fa fa-pencil-alt"></i>submit</a></li>
+          <li><a href="#about"><i class="fa fa-info"></i>about</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="content">
+
+      <div class="quote">
+        <div class="meta">
+          <div class="author">{{ author }}</div>
+          <div class="date">{{ date }}</div>
+          <div class="id"><a href="#quote{{ id }}">#{{ id }}</a></div>
+        </div>
+        <p class="text">{{ text }}</p>
+      </div>
+
+    </div>
+
+    <script>
+    $(function() {
+      $.ajax({
+          url: api_url + 'quotes/',
+          success: function(content) {
+              console.log(content.data);
+              var tpl = $.trim($('.content').html());
+              $.each(content.data, function(index, quote) {
+                console.log(quote);
+                var quote_html = tpl.replace(/{{ text }}/ig, quote.text);
+                $('.content').append(quote_html);
+              });
+          }
+      })
+    });
+    </script>
+  </body>
+</html>

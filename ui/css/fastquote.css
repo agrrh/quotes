@@ -1,0 +1,115 @@
+body {
+  background-color: #fff;
+  color: 222;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+h1 {
+  font-size: 28px;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-weight: bold;
+}
+
+div {
+  margin: auto;
+}
+
+p {
+  white-space: pre-line;
+  margin: 0px;
+}
+
+a {
+  color: #3064c9;
+}
+
+a:hover {
+  color: #3080c9;
+  text-decoration: none;
+}
+
+i.fa {
+  padding-right: 8px;
+}
+
+/* navigation */
+
+.navbar-bg {
+  background-color: #111;
+  color: #fafafa;
+}
+
+.navbar {
+  max-width: 900px;
+  padding: 0px 16px 0px 16px;
+}
+
+.navbar > ul {
+  list-style-type: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.navbar > ul > li {
+  float: left;
+  display: block;
+  padding: 10px 16px 12px 16px;
+}
+
+.navbar > ul > li:hover {
+  background: #222;
+}
+
+.navbar a {
+  color: #d0d0d0;
+}
+
+.navbar a:hover {
+  color: #ffffff;
+}
+
+/* content */
+
+.content {}
+
+.quote {
+  max-width: 800px;
+  margin: 16px auto;
+  padding: 8px 16px 0px 16px;
+
+  border-top: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-left: 8px solid #ddd;
+  background-color: #fafafa;
+}
+
+.quote::after {
+  max-width: 600px;
+  margin: auto;
+  padding: 8px 16px 16px 16px;
+}
+
+.quote > .meta > div {
+  display: inline-block;
+}
+
+.quote > .meta > .author {
+  font-weight: bold;
+}
+
+.quote > .meta > .date {
+  color: #aaa;
+  font-size: 75%;
+}
+
+.quote > .meta > .id {
+  float: right;
+  font-size: 75%;
+}
+
+.quote > .text {
+  max-width: 768px;
+  padding: 8px;
+}
