@@ -19,11 +19,11 @@ services:
     depends_on:
       - storage
 
-#  ui:
-#    image: nginx:stable
-#    ports:
-#      - 5000:80
-#    volumes:
-#      - ./ui:/usr/share/nginx/html
-#    depends_on:
-#      - api
+  ui:
+    image: nginx:stable
+    ports:
+      - 5000:80
+    volumes:
+      - ./ui:/usr/share/nginx/html
+    depends_on:
+      - api
