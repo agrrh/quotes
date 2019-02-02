@@ -28,11 +28,16 @@ class API(object):
         )
 
     def route_quotes_list(self, request):
-        # TODO
+        limit = int(request.query.get('limit', 20))
+        offset = int(request.query.get('offset', 0))
+
+        data = [q for q in self.manager.quotes_list(limit=limit, offset=offset)]
+
         return self.__form_response(
             request,
             code=200,
-            message='OK'
+            message='OK',
+            data=data
         )
 
     def route_quote_create(self, request):
@@ -84,7 +89,23 @@ class API(object):
         )
 
     def route_quote_delete(self, request):
-        # TODO
+        # TODO add auth
+        id = request.match_dict.get('id')
+        if not id:
+            return self.__form_response(
+                request,
+                code=400,
+                message='Malformed request'
+            )
+
+        result = self.manager.quote_delete(id)
+        if not result:
+            return self.__form_response(
+                request,
+                code=404,
+                message='Not found'
+            )
+
         return self.__form_response(
             request,
             code=200,

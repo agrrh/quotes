@@ -22,7 +22,7 @@ class Manager(object):
     def quote_read(self, id):
         q = Quote(id)
 
-        data = self.storage.read(key=q.id)
+        data = self.storage.read(q.id)
         if not data:
             return False
 
@@ -30,3 +30,9 @@ class Manager(object):
             setattr(q, key, val)
 
         return q.__dict__
+
+    def quotes_list(self, offset=0, limit=20):
+        return self.storage.list(offset=offset, limit=limit)
+
+    def quote_delete(self, id):
+        return self.storage.delete(int(id))
