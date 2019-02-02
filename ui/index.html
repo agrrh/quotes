@@ -56,10 +56,12 @@
       $.ajax({
           url: api_url + 'quotes/',
           success: function(content) {
-              var tpl = $.trim($('#content').html());
-              $.each(JSON.parse(content), function(index, quote) {
-                var quote_html = tpl.replace(/{{text}}/ig, quote.text);
-                $('.container').append(quote_html);
+              console.log(content.data);
+              var tpl = $.trim($('.content').html());
+              $.each(content.data, function(index, quote) {
+                console.log(quote);
+                var quote_html = tpl.replace(/{{ text }}/ig, quote.text);
+                $('.content').append(quote_html);
               });
           }
       })
