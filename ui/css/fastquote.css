@@ -1,5 +1,6 @@
 body {
   background-color: #fafbfc;
+  font: 16px arial, serif;
 }
 
 h1 {
@@ -51,11 +52,12 @@ div {
 
 .quote > .meta > .date {
   color: #aaa;
-  font-size: 12px;
+  font-size: 75%;
 }
 
 .quote > .meta > .id {
   float: right;
+  font-size: 75%;
 }
 
 .quote > .text {
