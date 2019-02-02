@@ -7,6 +7,11 @@ h1 {
   font-family: serif;
 }
 
+div {
+  /* border: 1px dotted #aaa; */
+  margin: auto;
+}
+
 /* navigation */
 
 .navbar {
@@ -52,4 +57,9 @@ h1 {
 
 .quote > .meta > .id {
   float: right;
+}
+
+.quote > .text {
+  max-width: 760px;
+  padding: 8px 0px;
 }
