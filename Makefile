@@ -1,0 +1,2 @@
+docs:
+	docsify serve ./docs
