@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Material+Icons');
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed');
+
+:root {
+  font-family: 'Roboto', sans-serif;
+}
+
+body, div#app {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Roboto Condensed', sans-serif;
+}
