@@ -31,3 +31,11 @@ This repository is another implementation of same idea. Purposes are fun and edu
 Have a look through existing [Issues](https://github.com/agrrh/quotes/issues) and [Pull Requests](https://github.com/agrrh/quotes/pulls) that you could help with. If you'd like to request a feature or report a bug, please [create a GitHub Issue](https://github.com/agrrh/quotes/issues) using one of the templates provided.
 
 <!-- [See contribution guide →](https://github.com/agrrh/quotes/blob/master/CONTRIBUTING.md) -->
+
+### Local dev mode
+
+```sh
+task dev
+```
+
+Requires [taskfile](https://taskfile.dev/) to be installed.
