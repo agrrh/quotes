@@ -2,6 +2,18 @@
 
 kind: pipeline
 type: docker
+name: common
+
+steps:
+  - name: editorconfig
+    image: mstruebing/editorconfig-checker:2.4.0
+    commands:
+      - ec -config .editorconfig
+
+---
+
+kind: pipeline
+type: docker
 name: docs
 
 steps:
