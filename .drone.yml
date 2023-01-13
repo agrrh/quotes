@@ -1,0 +1,21 @@
+---
+
+kind: pipeline
+type: docker
+name: default
+
+steps:
+  - name: docs
+    image: alpine:3.17
+    commands:
+      - sleep 1
+
+  - name: backend
+    image: python:3.10-alpine
+    commands:
+      - sleep 1
+
+  - name: frontend
+    image: node:16
+    commands:
+      - sleep 1
