@@ -2,20 +2,34 @@
 
 kind: pipeline
 type: docker
-name: default
+name: docs
 
 steps:
-  - name: docs
-    image: alpine:3.17
+  - name: tests
+    image: agrrh/cigp
     commands:
-      - sleep 1
+      - task docs:tests
 
-  - name: backend
-    image: python:3.10-alpine
-    commands:
-      - sleep 1
+---
 
-  - name: frontend
-    image: node:16
+kind: pipeline
+type: docker
+name: backend
+
+steps:
+  - name: tests
+    image: agrrh/cigp
     commands:
-      - sleep 1
+      - task backend:tests
+
+---
+
+kind: pipeline
+type: docker
+name: frontend
+
+steps:
+  - name: tests
+    image: agrrh/cigp
+    commands:
+      - task frontend:tests
