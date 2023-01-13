@@ -10,7 +10,11 @@ Few years ago I cloned it using PHP, this attempt resulted in **just_quotes** en
 
 This repository is another implementation of same idea. Purposes are fun and education.
 
+## Shields
+
 <!-- TODO: Add shields.io -->
+
+[![Build Status](https://drone-gh.agrrh.com/api/badges/agrrh/quotes/status.svg)](https://drone-gh.agrrh.com/agrrh/quotes)
 
 ## Getting started
 
