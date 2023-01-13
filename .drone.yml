@@ -8,7 +8,7 @@ steps:
   - name: tests
     image: agrrh/cigp
     commands:
-      - task docs:tests
+      - go-task docs:tests
 
 ---
 
@@ -20,7 +20,7 @@ steps:
   - name: tests
     image: agrrh/cigp
     commands:
-      - task backend:tests
+      - go-task backend:tests
 
 ---
 
@@ -32,4 +32,4 @@ steps:
   - name: tests
     image: agrrh/cigp
     commands:
-      - task frontend:tests
+      - go-task frontend:tests
