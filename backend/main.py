@@ -49,17 +49,17 @@ def get_root():
 
 
 @app.post("/quotes/", response_model=SQuote)
-def create_quote(quote: SQuoteCreate, db: Session = Depends(get_db)):
+def create_quote(quote: SQuoteCreate, db: Session = Depends(get_db)):  # noqa: B008
     return crud.create_quote(db=db, quote=quote)
 
 
 @app.get("/quotes/", response_model=List[SQuote])
-def read_quotes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def read_quotes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):  # noqa: B008
     return crud.get_quotes(db, skip=skip, limit=limit)
 
 
 @app.get("/quotes/{quote_id}", response_model=SQuote)
-def read_quote(quote_id: int, db: Session = Depends(get_db)):
+def read_quote(quote_id: int, db: Session = Depends(get_db)):  # noqa: B008
     db_quote = crud.get_quote(db, quote_id=quote_id)
     if db_quote is None:
         raise HTTPException(status_code=404, detail="Quote not found")

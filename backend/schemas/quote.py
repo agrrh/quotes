@@ -13,7 +13,7 @@ class SQuoteCreate(SQuoteBase):
 
 
 class SQuote(SQuoteBase):
-    id: str
+    qid: str
     added_at: datetime
     approved_at: datetime
 
