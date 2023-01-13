@@ -8,7 +8,7 @@ steps:
   - name: editorconfig
     image: mstruebing/editorconfig-checker:2.4.0
     commands:
-      - ec -config .editorconfig
+      - ec -config .editorconfig -verbose
 
 ---
 
