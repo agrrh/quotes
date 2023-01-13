@@ -1,0 +1,16 @@
+---
+
+version: '3'
+
+tasks:
+  docs:
+    preconditions:
+      - docsify --version
+    cmds:
+      - docsify serve ./docs
+
+  dev:
+    preconditions:
+      - docker-compose --version
+    cmds:
+      - docker-compose up --build
