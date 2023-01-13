@@ -2,20 +2,46 @@
 
 kind: pipeline
 type: docker
-name: default
+name: common
 
 steps:
-  - name: docs
-    image: alpine:3.17
+  - name: editorconfig
+    image: mstruebing/editorconfig-checker:2.4.0
     commands:
-      - sleep 1
+      - ec -config .editorconfig -verbose
 
-  - name: backend
-    image: python:3.10-alpine
-    commands:
-      - sleep 1
+---
 
-  - name: frontend
-    image: node:16
+kind: pipeline
+type: docker
+name: docs
+
+steps:
+  - name: tests
+    image: agrrh/cigp
     commands:
-      - sleep 1
+      - go-task docs:tests
+
+---
+
+kind: pipeline
+type: docker
+name: backend
+
+steps:
+  - name: tests
+    image: agrrh/cigp
+    commands:
+      - go-task backend:tests
+
+---
+
+kind: pipeline
+type: docker
+name: frontend
+
+steps:
+  - name: tests
+    image: agrrh/cigp
+    commands:
+      - go-task frontend:tests

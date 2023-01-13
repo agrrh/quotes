@@ -15,14 +15,16 @@ tasks:
     cmds:
       - docker-compose up --build
 
-  # test:
-  #   preconditions:
-  #     - python -c 'import sys; assert sys.version_info.major == 3'
-  #   cmds:
-  #     - sleep 0
+  docs:tests:
+    cmds:
+      - sleep 0
 
-  ci:
-    # deps:
-    #   - test
+  backend:tests:
+    preconditions:
+      - python -c 'import sys; assert sys.version_info.major == 3'
+    cmds:
+      - flake8 ./backend
+
+  frontend:tests:
     cmds:
       - sleep 0
