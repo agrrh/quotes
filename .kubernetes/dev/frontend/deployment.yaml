@@ -1,0 +1,37 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: frontend
+  namespace: quotes-dev
+  labels:
+    app: quotes
+    component: frontend
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quotes
+      component: frontend
+
+  template:
+    metadata:
+      labels:
+        app: quotes
+        component: frontend
+
+    spec:
+      containers:
+        - name: app
+          image: agrrh/quotes-frontend:latest
+
+          env:
+            - name: APP_ENV
+              value: local
+
+          ports:
+            - name: http
+              containerPort: 80
