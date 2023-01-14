@@ -11,9 +11,9 @@ tasks:
 
   dev:
     preconditions:
-      - docker-compose --version
+      - skaffold version
     cmds:
-      - docker-compose up --build
+      - skaffold dev
 
   docs:tests:
     cmds:
