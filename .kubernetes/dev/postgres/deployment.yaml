@@ -1,0 +1,43 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: postgres
+  namespace: quotes-dev
+  labels:
+    app: quotes
+    component: postgres
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quotes
+      component: postgres
+
+  template:
+    metadata:
+      labels:
+        app: quotes
+        component: postgres
+
+    spec:
+      containers:
+        - name: app
+          image: postgres:14.5
+
+          # TODO: Move to secrets
+          env:
+            - name: POSTGRES_USER
+              value: "quotes"
+            - name: POSTGRES_PASSWORD
+              value: "password"
+            - name: POSTGRES_DB
+              value: "quotes"
+
+          ports:
+            - containerPort: 5432
+
+          # TODO: Add volume
