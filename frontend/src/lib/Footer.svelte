@@ -16,6 +16,7 @@
         <h5>Links</h5>
         <ul>
           <li><a href="/add">Add new quote</a></li>
+          <li><a href="/new">New quotes</a></li>
           <li><a href="/best">Best quotes</a></li>
           <li><a href="/unsorted">Unsorted quotes</a></li>
           <li><a href="/about">About this site</a></li>

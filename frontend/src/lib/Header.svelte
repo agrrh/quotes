@@ -21,7 +21,7 @@
         </li>
 
         <li>
-          <a href="/unsorted">
+          <a href="/new">
             <i class="material-icons left deep-orange-text text-accent-1">new_releases</i>
             New
           </a>
