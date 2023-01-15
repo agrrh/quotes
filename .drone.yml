@@ -6,7 +6,7 @@ name: lint
 
 steps:
   - name: lint
-    image: agrrh/cider  # TODO Freeze version
+    image: agrrh/cider:0.2.0
     commands:
       - go-task lint
 
@@ -18,6 +18,6 @@ name: test
 
 steps:
   - name: test
-    image: agrrh/cider  # TODO Freeze version
+    image: agrrh/cider:0.2.0
     commands:
       - go-task test
