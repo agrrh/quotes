@@ -7,10 +7,6 @@ tasks:
     preconditions:
       - pip --version
     cmds:
-      # TODO: Add apk cache proxy?
-      - apk update
-      - apk install gcc musl-dev
-      # TODO: Add pip cache proxy?
       - pip install -r requirements.txt
       - pip install -r requirements.ci.txt
 
