@@ -1,0 +1,45 @@
+---
+
+version: '3'
+
+tasks:
+  lint:init:
+    preconditions:
+      - pip --version
+    cmds:
+      - pip install -r requirements.ci.txt
+
+  lint:flake8:
+    deps:
+      - lint:init
+    preconditions:
+      - flake8 --version
+    cmds:
+      - flake8 ./
+
+  lint:black:
+    deps:
+      - lint:init
+    preconditions:
+      - black --version
+    cmds:
+      - black --check --diff ./
+
+  lint:
+    deps:
+      - lint:flake8
+      - lint:black
+
+  test:init:
+    preconditions:
+      - pip --version
+    cmds:
+      - pip install -r requirements.ci.txt
+
+  test:
+    preconditions:
+      - python --version
+    deps:
+      - test:init
+    cmds:
+      - pytest ./test

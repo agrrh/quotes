@@ -2,46 +2,131 @@
 
 kind: pipeline
 type: docker
-name: common
+name: lint
+
+trigger:
+  event:
+    - pull_request
 
 steps:
-  - name: editorconfig
-    image: mstruebing/editorconfig-checker:2.4.0
+  - name: lint
+    image: agrrh/cider:0.2.0
     commands:
-      - ec -config .editorconfig -verbose
+      - go-task lint
 
 ---
 
 kind: pipeline
 type: docker
-name: docs
+name: build-pr
+
+trigger:
+  event:
+    - pull_request
 
 steps:
-  - name: tests
-    image: agrrh/cigp
-    commands:
-      - go-task docs:tests
+  - name: backend
+    depends_on: []
+    image: plugins/docker
+    settings:
+      purge: false
+      context: ./backend
+      dockerfile: ./backend/Dockerfile
+      username: agrrh
+      password:
+        from_secret: docker_password
+      repo: agrrh/quotes-backend
+      # auto_tag: true
+      tags:
+        - latest
+        - ${DRONE_COMMIT_SHA}
+
+  - name: frontend
+    depends_on: []
+    image: plugins/docker
+    settings:
+      purge: false
+      context: ./frontend
+      dockerfile: ./frontend/Dockerfile
+      username: agrrh
+      password:
+        from_secret: docker_password
+      repo: agrrh/quotes-frontend
+      # auto_tag: true
+      tags:
+        - latest
+        - ${DRONE_COMMIT_SHA}
 
 ---
 
 kind: pipeline
 type: docker
-name: backend
+name: build-push-or-tag
+
+trigger:
+  event:
+    - cron
+    - push
+    - tag
 
 steps:
-  - name: tests
-    image: agrrh/cigp
-    commands:
-      - go-task backend:tests
+  - name: backend
+    depends_on: []
+    image: plugins/docker
+    settings:
+      purge: false
+      context: ./backend
+      dockerfile: ./backend/Dockerfile
+      username: agrrh
+      password:
+        from_secret: docker_password
+      repo: agrrh/quotes-backend
+      auto_tag: true
+
+  - name: frontend
+    depends_on: []
+    image: plugins/docker
+    settings:
+      purge: false
+      context: ./frontend
+      dockerfile: ./frontend/Dockerfile
+      username: agrrh
+      password:
+        from_secret: docker_password
+      repo: agrrh/quotes-frontend
+      auto_tag: true
 
 ---
 
 kind: pipeline
 type: docker
-name: frontend
+name: test
+
+trigger:
+  event:
+    - pull_request
+
+depends_on:
+  - build-pr
 
 steps:
-  - name: tests
-    image: agrrh/cigp
+  - name: application
+    detach: true
+    image: agrrh/quotes-backend:${DRONE_COMMIT_SHA}
+    environment:
+      APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
+
+  - name: test
+    image: agrrh/cider:0.2.0
+    environment:
+      APP_URL: "http://application:3000"
     commands:
-      - go-task frontend:tests
+      - go-task test
+
+services:
+  - name: postgres
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: quotes
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: quotes

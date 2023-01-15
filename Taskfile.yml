@@ -2,6 +2,19 @@
 
 version: '3'
 
+includes:
+  docs:
+    taskfile: ./docs/Taskfile.yml
+    dir: ./docs
+
+  backend:
+    taskfile: ./backend/Taskfile.yml
+    dir: ./backend
+
+  frontend:
+    taskfile: ./frontend/Taskfile.yml
+    dir: ./frontend
+
 tasks:
   docs:
     preconditions:
@@ -15,16 +28,21 @@ tasks:
     cmds:
       - skaffold dev
 
-  docs:tests:
-    cmds:
-      - sleep 0
-
-  backend:tests:
+  common:lint:
     preconditions:
-      - python -c 'import sys; assert sys.version_info.major == 3'
+      - ec -version
     cmds:
-      - flake8 ./backend
+      - ec
 
-  frontend:tests:
-    cmds:
-      - sleep 0
+  lint:
+    deps:
+      - common:lint
+      - docs:lint
+      - backend:lint
+      - frontend:lint
+
+  test:
+    deps:
+      - docs:test
+      - backend:test
+      - frontend:test

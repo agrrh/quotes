@@ -32,7 +32,7 @@ app.add_middleware(
 
 
 # Dependency
-def get_db():
+def get_db() -> SessionLocal:
     db = SessionLocal()
     try:
         yield db
@@ -41,7 +41,7 @@ def get_db():
 
 
 @app.get("/")
-def get_root():
+def get_root() -> dict:
     return {
         "name": "quotes",
         "version": os.environ.get("APP_VERSION") or "develop",  # FIXME
@@ -49,17 +49,18 @@ def get_root():
 
 
 @app.post("/quotes/", response_model=SQuote)
-def create_quote(quote: SQuoteCreate, db: Session = Depends(get_db)):  # noqa: B008
+def create_quote(quote: SQuoteCreate, db: Session = Depends(get_db)) -> SQuote:  # noqa: B008
+    # TODO: Return code 201 and fix test case accordingly
     return crud.create_quote(db=db, quote=quote)
 
 
 @app.get("/quotes/", response_model=List[SQuote])
-def read_quotes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):  # noqa: B008
+def read_quotes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> List[SQuote]:  # noqa: B008
     return crud.get_quotes(db, skip=skip, limit=limit)
 
 
 @app.get("/quotes/{quote_id}", response_model=SQuote)
-def read_quote(quote_id: int, db: Session = Depends(get_db)):  # noqa: B008
+def read_quote(quote_id: int, db: Session = Depends(get_db)) -> SQuote:  # noqa: B008
     db_quote = crud.get_quote(db, quote_id=quote_id)
     if db_quote is None:
         raise HTTPException(status_code=404, detail="Quote not found")
