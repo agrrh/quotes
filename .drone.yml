@@ -110,6 +110,12 @@ depends_on:
   - build-pr
 
 steps:
+  - name: application
+    detach: true
+    image: agrrh/quotes-backend:${DRONE_COMMIT_SHA}
+    environment:
+      APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
+
   - name: test
     image: agrrh/cider:0.2.0
     environment:
@@ -124,8 +130,3 @@ services:
       POSTGRES_USER: quotes
       POSTGRES_PASSWORD: password
       POSTGRES_DB: quotes
-
-  - name: application
-    image: agrrh/quotes-backend:${DRONE_COMMIT_SHA}
-    environment:
-      APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
