@@ -27,6 +27,16 @@ steps:
       repo: agrrh/quotes-backend
       auto_tag: true
 
+  - name: frontend
+    image: plugins/docker
+    settings:
+      context: ./frontend
+      username: agrrh
+      password:
+        from_secret: docker_password
+      repo: agrrh/quotes-frontend
+      auto_tag: true
+
 ---
 
 kind: pipeline
