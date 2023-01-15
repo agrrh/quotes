@@ -28,6 +28,7 @@ steps:
   - name: backend
     image: plugins/docker
     settings:
+      purge: false
       context: ./backend
       dockerfile: ./backend/Dockerfile
       username: agrrh
@@ -42,6 +43,7 @@ steps:
   - name: frontend
     image: plugins/docker
     settings:
+      purge: false
       context: ./frontend
       dockerfile: ./frontend/Dockerfile
       username: agrrh
@@ -69,6 +71,7 @@ steps:
   - name: backend
     image: plugins/docker
     settings:
+      purge: false
       context: ./backend
       dockerfile: ./backend/Dockerfile
       username: agrrh
@@ -80,6 +83,7 @@ steps:
   - name: frontend
     image: plugins/docker
     settings:
+      purge: false
       context: ./frontend
       dockerfile: ./frontend/Dockerfile
       username: agrrh
