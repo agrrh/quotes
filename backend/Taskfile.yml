@@ -11,7 +11,7 @@ tasks:
 
   lint:flake8:
     deps:
-      - init
+      - lint:init
     preconditions:
       - flake8 --version
     cmds:
@@ -19,7 +19,7 @@ tasks:
 
   lint:black:
     deps:
-      - init
+      - lint:init
     preconditions:
       - black --version
     cmds:
@@ -40,6 +40,6 @@ tasks:
     preconditions:
       - python --version
     deps:
-      - init
+      - test:init
     cmds:
       - pytest ./tests
