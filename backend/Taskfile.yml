@@ -16,7 +16,7 @@ tasks:
     preconditions:
       - flake8 --version
     cmds:
-      - flake8 ./backend
+      - flake8 ./
 
   lint:black:
     deps:
@@ -24,7 +24,7 @@ tasks:
     preconditions:
       - black --version
     cmds:
-      - black --check --diff ./backend
+      - black --check --diff ./
 
   lint:
     deps:
@@ -37,4 +37,4 @@ tasks:
     deps:
       - init
     cmds:
-      - pytest backend/tests
+      - pytest ./tests
