@@ -26,6 +26,7 @@ trigger:
 
 steps:
   - name: backend
+    depends_on: []
     image: plugins/docker
     settings:
       purge: false
@@ -41,6 +42,7 @@ steps:
         - ${DRONE_COMMIT_SHA}
 
   - name: frontend
+    depends_on: []
     image: plugins/docker
     settings:
       purge: false
@@ -69,6 +71,7 @@ trigger:
 
 steps:
   - name: backend
+    depends_on: []
     image: plugins/docker
     settings:
       purge: false
@@ -81,6 +84,7 @@ steps:
       auto_tag: true
 
   - name: frontend
+    depends_on: []
     image: plugins/docker
     settings:
       purge: false
@@ -106,21 +110,11 @@ depends_on:
   - build-pr
 
 steps:
-  - name: application
-    detach: true
-    image: agrrh/quotes-backend:${DRONE_COMMIT_SHA}
-    environment:
-      APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
-    commands:
-      - sleep 15
-      - uvicorn main:app --host 0.0.0.0 --port 3000
-
   - name: test
     image: agrrh/cider:0.2.0
     environment:
       APP_URL: "http://application:3000"
     commands:
-      - sleep 30
       - go-task test
 
 services:
@@ -130,3 +124,8 @@ services:
       POSTGRES_USER: quotes
       POSTGRES_PASSWORD: password
       POSTGRES_DB: quotes
+
+  - name: application
+    image: agrrh/quotes-backend:${DRONE_COMMIT_SHA}
+    environment:
+      APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
