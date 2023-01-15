@@ -15,7 +15,7 @@ def __paginate(query_result: object, skip: int = 0, limit: int = 20) -> List[Any
 
 
 def get_quote(db: Session, quote_id: int) -> SQuote:
-    return __get_quotes(db).filter(MQuote.id == quote_id).first()
+    return __get_quotes(db).filter(MQuote.qid == quote_id).first()
 
 
 def get_quotes(db: Session, skip: int = 0, limit: int = 20) -> List[SQuote]:
