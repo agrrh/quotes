@@ -3,13 +3,19 @@
 version: '3'
 
 includes:
-  backend: ./backend
-  frontend: ./frontend
-  docs: ./docs
+  docs:
+    taskfile: ./docs/Taskfile.yml
+    dir: ./docs
+
+  backend:
+    taskfile: ./backend/Taskfile.yml
+    dir: ./backend
+
+  frontend:
+    taskfile: ./frontend/Taskfile.yml
+    dir: ./frontend
 
 tasks:
-  # Dev
-
   docs:
     preconditions:
       - docsify --version
@@ -21,8 +27,6 @@ tasks:
       - skaffold version
     cmds:
       - skaffold dev
-
-  # Linters
 
   common:lint:
     preconditions:
@@ -36,8 +40,6 @@ tasks:
       - docs:lint
       - backend:lint
       - frontend:lint
-
-  # Tests
 
   test:
     deps:

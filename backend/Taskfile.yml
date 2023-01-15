@@ -11,12 +11,16 @@ tasks:
       - pip install -r requirements.ci.txt
 
   lint:flake8:
+    deps:
+      - init
     preconditions:
       - flake8 --version
     cmds:
       - flake8 ./backend
 
   lint:black:
+    deps:
+      - init
     preconditions:
       - black --version
     cmds:
@@ -24,7 +28,6 @@ tasks:
 
   lint:
     deps:
-      - init
       - lint:flake8
       - lint:black
 
