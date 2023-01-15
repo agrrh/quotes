@@ -26,7 +26,7 @@ class TestIndex:
         }
 
         response = requests.post(f"{URL}/quotes/", json=body)
-        assert response.status_code == 201
+        assert response.status_code == 200
 
         assert response.json().get("author") == author
         assert response.json().get("content") == content
