@@ -20,4 +20,5 @@ flake8-scream==0.1.0
 flake8-simplify==0.19.3
 flake8-use-pathlib==0.3.0
 
+faker==16.4.0
 pytest==7.2.1
