@@ -54,7 +54,7 @@ def create_quote(quote: SQuoteCreate, db: Session = Depends(get_db)) -> SQuote: 
 
 
 @app.get("/quotes/", response_model=List[SQuote])
-def read_quotes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> List(SQuote):  # noqa: B008
+def read_quotes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)) -> List[SQuote]:  # noqa: B008
     return crud.get_quotes(db, skip=skip, limit=limit)
 
 
