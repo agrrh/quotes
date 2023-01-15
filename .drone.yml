@@ -65,5 +65,4 @@ services:
   - name: application
     image: agrrh/quotes-backend
     environment:
-      POSTGRES_USER: quotes
       APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
