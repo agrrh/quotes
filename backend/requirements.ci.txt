@@ -21,3 +21,5 @@ flake8-use-pathlib==0.3.0
 
 faker==16.4.0
 pytest==7.2.1
+
+requests==2.28.1
