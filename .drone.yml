@@ -2,46 +2,22 @@
 
 kind: pipeline
 type: docker
-name: common
+name: lint
 
 steps:
-  - name: editorconfig
-    image: mstruebing/editorconfig-checker:2.4.0
+  - name: lint
+    image: agrrh/cider  # TODO Freeze version
     commands:
-      - ec -config .editorconfig -verbose
+      - go-task lint
 
 ---
 
 kind: pipeline
 type: docker
-name: docs
+name: test
 
 steps:
-  - name: tests
-    image: agrrh/cigp
+  - name: lint
+    image: agrrh/cider  # TODO Freeze version
     commands:
-      - go-task docs:tests
-
----
-
-kind: pipeline
-type: docker
-name: backend
-
-steps:
-  - name: tests
-    image: agrrh/cigp
-    commands:
-      - go-task backend:tests
-
----
-
-kind: pipeline
-type: docker
-name: frontend
-
-steps:
-  - name: tests
-    image: agrrh/cigp
-    commands:
-      - go-task frontend:tests
+      - go-task test

@@ -1,0 +1,16 @@
+---
+
+version: '3'
+
+tasks:
+  lint:
+    preconditions:
+      - python -c 'import sys; assert sys.version_info.major == 3'
+    cmds:
+      - flake8 ./backend
+
+  test:
+    preconditions:
+      - python -c 'import sys; assert sys.version_info.major == 3'
+    cmds:
+      - pytest backend/tests

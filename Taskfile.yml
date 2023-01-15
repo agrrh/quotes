@@ -2,7 +2,14 @@
 
 version: '3'
 
+includes:
+  backend: ./backend
+  frontend: ./frontend
+  docs: ./docs
+
 tasks:
+  # Dev
+
   docs:
     preconditions:
       - docsify --version
@@ -15,16 +22,23 @@ tasks:
     cmds:
       - skaffold dev
 
-  docs:tests:
-    cmds:
-      - sleep 0
+  # Linters
 
-  backend:tests:
-    preconditions:
-      - python -c 'import sys; assert sys.version_info.major == 3'
+  common:lint:
     cmds:
-      - flake8 ./backend
+      - ec -config .editorconfig -verbose
 
-  frontend:tests:
-    cmds:
-      - sleep 0
+  lint:
+    deps:
+      - common:lint
+      - docs:lint
+      - backend:lint
+      - frontend:lint
+
+  # Tests
+
+  test:
+    deps:
+      - docs:test
+      - backend:test
+      - frontend:test
