@@ -1,0 +1,6 @@
+[tool.flake8]
+max-line-length = 119
+
+[tool.black]
+line-length = 119
+fast = true
