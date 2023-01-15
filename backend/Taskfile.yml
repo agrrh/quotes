@@ -42,4 +42,4 @@ tasks:
     deps:
       - test:init
     cmds:
-      - pytest ./tests
+      - pytest ./test

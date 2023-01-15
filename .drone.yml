@@ -17,7 +17,7 @@ type: docker
 name: test
 
 steps:
-  - name: lint
+  - name: test
     image: agrrh/cider  # TODO Freeze version
     commands:
       - go-task test
