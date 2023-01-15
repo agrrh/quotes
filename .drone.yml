@@ -99,7 +99,7 @@ trigger:
     - pull_request
 
 depends_on:
-  - build
+  - build-pr
 
 steps:
   - name: test
