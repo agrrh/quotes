@@ -1,9 +1,11 @@
+import os
 import requests
+
 from faker import Faker
 
 fake = Faker()
 
-URL = "http://127.0.0.1:8081"
+URL = os.environ.get("APP_URL", "http://127.0.0.1:8081")
 
 
 class TestIndex:

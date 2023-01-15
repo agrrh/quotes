@@ -36,5 +36,22 @@ name: test
 steps:
   - name: test
     image: agrrh/cider:0.2.0
+    environment:
+      APP_URL: "http://api:3000"
     commands:
+      - sleep 15
       - go-task test
+
+services:
+  - name: postgres
+    image: postgres:14.5
+    environment:
+      POSTGRES_USER: quotes
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: quotes
+
+  - name: api
+    image: agrrh/quotes-backend
+    environment:
+      POSTGRES_USER: quotes
+      APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
