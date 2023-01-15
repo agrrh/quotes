@@ -50,6 +50,7 @@ def get_root() -> dict:
 
 @app.post("/quotes/", response_model=SQuote)
 def create_quote(quote: SQuoteCreate, db: Session = Depends(get_db)) -> SQuote:  # noqa: B008
+    # TODO: Return code 201 and fix test case accordingly
     return crud.create_quote(db=db, quote=quote)
 
 
