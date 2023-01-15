@@ -7,7 +7,7 @@ URL = "http://127.0.0.1:8081"
 
 
 class TestIndex:
-    def test_index(self):
+    def test_index(self: object) -> None:
         response = requests.get(URL)
         assert response.status_code == 201
         assert response.json().get("message") == "User created successfully."
