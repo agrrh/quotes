@@ -3,10 +3,19 @@
 version: '3'
 
 tasks:
-  lint:
+  lint:init:
+    preconditions:
+      - node --version
     cmds:
-      - sleep 0
+      - npm install
 
+  lint:
+    deps:
+      - lint:init
+    cmds:
+      - npm run lint
+
+  # TODO: Add some tests via playwright?
   test:
     cmds:
       - sleep 0
