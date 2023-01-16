@@ -3,7 +3,7 @@
 
 	<div class="section quotes-list">
 		<article class="card-panel">
-			<a href="./#!">#12345</a>
+			<a href="./vote">#12345</a>
 
 			<span class="right">19.08.2022 22:51</span>
 
@@ -19,18 +19,18 @@
 			</p>
 
 			<div class="center">
-				<a href="./#!" class="grey-text">
+				<a href="./vote" class="grey-text">
 					<i class="material-icons tiny">thumb_up</i>
 				</a>
-				<span href="./#!" class="grey-text"> +1234 </span>
-				<a href="./#!" class="grey-text">
+				<span href="./vote" class="grey-text"> +1234 </span>
+				<a href="./vote" class="grey-text">
 					<i class="material-icons tiny">thumb_down</i>
 				</a>
 			</div>
 		</article>
 
 		<article class="card-panel">
-			<a href="./#!">#12345</a>
+			<a href="./vote">#12345</a>
 
 			<span class="right">19.08.2022 22:51</span>
 
@@ -46,11 +46,11 @@
 			</p>
 
 			<div class="center">
-				<a href="./#!" class="grey-text">
+				<a href="./vote" class="grey-text">
 					<i class="material-icons tiny">thumb_up</i>
 				</a>
-				<span href="./#!" class="grey-text"> ??? </span>
-				<a href="./#!" class="grey-text">
+				<span href="./vote" class="grey-text"> ??? </span>
+				<a href="./vote" class="grey-text">
 					<i class="material-icons tiny">thumb_down</i>
 				</a>
 			</div>
@@ -61,13 +61,13 @@
 
 	<div class="section pagination">
 		<ul class="pagination center text-grey">
-			<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-			<li class="active blue"><a href="#!">1</a></li>
-			<li class="waves-effect"><a href="#!">2</a></li>
-			<li class="waves-effect"><a href="#!">3</a></li>
-			<li class="waves-effect"><a href="#!">4</a></li>
-			<li class="waves-effect"><a href="#!">5</a></li>
-			<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+			<li class="disabled"><a href="/pages"><i class="material-icons">chevron_left</i></a></li>
+			<li class="active blue"><a href="/pages">1</a></li>
+			<li class="waves-effect"><a href="/pages">2</a></li>
+			<li class="waves-effect"><a href="/pages">3</a></li>
+			<li class="waves-effect"><a href="/pages">4</a></li>
+			<li class="waves-effect"><a href="/pages">5</a></li>
+			<li class="waves-effect"><a href="/pages"><i class="material-icons">chevron_right</i></a></li>
 		</ul>
 	</div>
 </main>
