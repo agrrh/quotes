@@ -1,5 +1,5 @@
-// Package handlers - Reponse models
-package handlers
+// Package handler - Reponse models
+package handler
 
 // Response - composed response object, representing meta stuff e.g. success and items count
 type Response struct {
