@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"encoding/json"
 	"time"
+	"math"
 
 	"github.com/labstack/echo/v4"
 )
@@ -22,12 +23,55 @@ type Quote struct {
 type QuotesList []Quote
 
 // GetQuotesList - GET /quotes
-// TODO: How to paginate?
+// FIXME: How to properly paginate? Redis KEYS does not actually sort keys.
+// FIXME: Simplify this method
 func GetQuotesList(c echo.Context) error {
-	quotes, err := CRUD.List("*")
+	var offset, limit int
+	var qids []string
+	var quotes []Quote
+
+	offset, _ = strconv.Atoi(c.QueryParam("offset"))
+	if offset == 0 {
+		offset = 0
+	}
+	limit, _ = strconv.Atoi(c.QueryParam("limit"))
+	if limit == 0 {
+		limit = 20
+	}
+
+	qids, err := CRUD.List("quote:*")
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, "Can't list quotes")
 	}
+
+	if offset > len(qids) {
+		offset = int(math.Max(0, float64(len(qids) - limit)))
+	}
+
+	if offset + limit > len(qids) {
+		limit = len(qids) - offset
+	}
+
+	qids = qids[offset : offset + limit]
+
+	for _, qid := range qids {
+		data, err := CRUD.Read(qid)
+
+		q := &Quote{}
+
+		err = json.Unmarshal([]byte(data), &q)
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, "Can't parse quote data")
+		}
+
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, "Can't get listed quote")
+		}
+
+		quotes = append(quotes, *q)
+	}
+
+	// TODO: Return response struct
 	return c.JSON(http.StatusOK, quotes)
 }
 
@@ -78,6 +122,7 @@ func GetQuote(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, "Can't parse quote data")
 	}
 
+	// TODO: Return response struct
 	return c.JSON(http.StatusOK, q)
 }
 
@@ -122,5 +167,6 @@ func DeleteQuote(c echo.Context) error {
 		return c.JSON(http.StatusNotFound, "Can't delete quote")
 	}
 
+	// TODO: Return response struct
 	return c.JSON(http.StatusOK, "Quote deleted")
 }
