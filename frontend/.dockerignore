@@ -1,6 +1,0 @@
-Dockerfile
-
-node_modules/
-dist/
-
-Taskfile.yml

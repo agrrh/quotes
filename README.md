@@ -16,9 +16,9 @@ This repository is another implementation of same idea. Purposes are fun and edu
 
 [![Build Status](https://drone-gh.agrrh.com/api/badges/agrrh/quotes/status.svg)](https://drone-gh.agrrh.com/agrrh/quotes)
 
-## Getting started
+<!-- ## Getting started
 
-- [Full documentation →](./docs)
+- [Full documentation →](./docs) -->
 
 ## Features
 
@@ -36,10 +36,10 @@ Have a look through existing [Issues](https://github.com/agrrh/quotes/issues) an
 
 <!-- [See contribution guide →](https://github.com/agrrh/quotes/blob/master/CONTRIBUTING.md) -->
 
-### Local dev mode
+<!-- ### Local dev mode
 
 ```sh
 task dev
 ```
 
-Requires [taskfile](https://taskfile.dev/) to be installed.
+Requires [taskfile](https://taskfile.dev/) to be installed. -->
