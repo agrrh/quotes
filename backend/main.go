@@ -44,12 +44,11 @@ func main() {
 	// e.GET("/", h.GetIndex)
 	// e.GET("/healthz", h.GetHealthz)
 
-	e.GET("/quotes", h.FetchQuotes)
 	e.POST("/quotes", h.CreateQuote)
+	e.GET("/quotes", h.FetchQuotes)
 	e.PUT("/quotes/:id/approve", h.ApproveQuote)
 	e.PUT("/quotes/:id/deny", h.DenyQuote)
-	// e.PUT("/quotes/:id", h.UpdateQuote)
-	// e.DELETE("/quotes/:id", h.DeleteQuote)
+	e.DELETE("/quotes/:id", h.DeleteQuote)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8081"))
