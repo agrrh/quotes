@@ -46,9 +46,9 @@ func main() {
 
 	e.GET("/quotes", h.FetchQuotes)
 	e.POST("/quotes", h.CreateQuote)
-	// e.GET("/quotes/:qid", h.GetQuote)
-	// e.PUT("/quotes/:qid", h.UpdateQuote)
-	// e.DELETE("/quotes/:qid", h.DeleteQuote)
+	e.PUT("/quotes/:id/approve", h.ApproveQuote)
+	// e.PUT("/quotes/:id", h.UpdateQuote)
+	// e.DELETE("/quotes/:id", h.DeleteQuote)
 
 	// Start server
 	e.Logger.Fatal(e.Start(":8081"))
