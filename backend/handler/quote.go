@@ -74,7 +74,7 @@ func (h *Handler) FetchQuotes(c echo.Context) (err error) {
 	return c.JSON(http.StatusOK, quotes)
 }
 
-// ApproveQuote - approve quote object
+// ApproveQuote - approve quote
 func (h *Handler) ApproveQuote(c echo.Context) (err error) {
 	id := c.Param("id")
 
@@ -90,6 +90,32 @@ func (h *Handler) ApproveQuote(c echo.Context) (err error) {
 	}
 
 	q.ApprovedAt = time.Now()
+
+	// Approve quote in database
+	err = db.DB(DBName).C(TableNameQuotes).Update(qSeek, q)
+	if err != nil {
+		return
+	}
+
+	return c.JSON(http.StatusCreated, q)
+}
+
+// DenyQuote - deny quote
+func (h *Handler) DenyQuote(c echo.Context) (err error) {
+	id := c.Param("id")
+
+	qSeek := bson.M{"_id": bson.ObjectIdHex(id)}
+
+	db := h.DB.Clone()
+	defer db.Close()
+
+	q := &model.Quote{}
+	err = db.DB(DBName).C(TableNameQuotes).Find(qSeek).One(&q)
+	if err != nil {
+		return
+	}
+
+	q.ApprovedAt = TimeNil
 
 	// Approve quote in database
 	err = db.DB(DBName).C(TableNameQuotes).Update(qSeek, q)

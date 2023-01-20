@@ -47,6 +47,7 @@ func main() {
 	e.GET("/quotes", h.FetchQuotes)
 	e.POST("/quotes", h.CreateQuote)
 	e.PUT("/quotes/:id/approve", h.ApproveQuote)
+	e.PUT("/quotes/:id/deny", h.DenyQuote)
 	// e.PUT("/quotes/:id", h.UpdateQuote)
 	// e.DELETE("/quotes/:id", h.DeleteQuote)
 
