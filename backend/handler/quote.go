@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/labstack/echo/v4"
 	"github.com/agrrh/quotes/backend/model"
+	"github.com/labstack/echo/v4"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -19,7 +19,7 @@ var (
 // CreateQuote - create quote object
 func (h *Handler) CreateQuote(c echo.Context) (err error) {
 	q := &model.Quote{
-		ID:   bson.NewObjectId(),
+		ID:      bson.NewObjectId(),
 		AddedAt: time.Now(),
 	}
 	err = c.Bind(q)
@@ -84,7 +84,9 @@ func (h *Handler) ApproveQuote(c echo.Context) (err error) {
 	defer db.Close()
 
 	q := &model.Quote{}
-	err = db.DB(DBName).C(TableNameQuotes).Find(qSeek).One(&q)
+	err = db.DB(DBName).C(TableNameQuotes).
+		Find(qSeek).
+		One(&q)
 	if err != nil {
 		return
 	}
@@ -110,7 +112,9 @@ func (h *Handler) DenyQuote(c echo.Context) (err error) {
 	defer db.Close()
 
 	q := &model.Quote{}
-	err = db.DB(DBName).C(TableNameQuotes).Find(qSeek).One(&q)
+	err = db.DB(DBName).C(TableNameQuotes).
+		Find(qSeek).
+		One(&q)
 	if err != nil {
 		return
 	}
