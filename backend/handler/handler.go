@@ -2,18 +2,10 @@
 package handler
 
 import (
-	"gopkg.in/mgo.v2"
+	"gorm.io/gorm"
 )
 
 // Handler - session container
 type Handler struct {
-	DB *mgo.Session
+	DB *gorm.DB
 }
-
-const (
-	// DBName - name of database
-	DBName = "quotes"
-
-	// TableNameQuotes - name of quotes table
-	TableNameQuotes = "quotes"
-)

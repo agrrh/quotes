@@ -2,15 +2,19 @@
 package model
 
 import (
-	"gopkg.in/mgo.v2/bson"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 // Quote - quote object
 type Quote struct {
-	ID         bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	Author     string        `json:"author" bson:"author"`
-	Content    string        `json:"content" bson:"content"`
-	AddedAt    time.Time     `json:"added_at" bson:"added_at"`
-	ApprovedAt time.Time     `json:"approved_at" bson:"approved_at"`
+	ID         uint           `gorm:"primaryKey" json:"id,omitempty"`
+	Author     string         `gorm:"not null" json:"author" valid:"required,length(3|64)"`
+	Content    string         `gorm:"not null" json:"content" valid:"required,length(8|1024)"`
+	AddedAt    time.Time      `gorm:"index" json:"added_at"`
+	ApprovedAt time.Time      `gorm:"index" json:"approved_at"`
+	DeletedAt  gorm.DeletedAt `gorm:"index" json:"deleted_at"`
 }
+
+// TODO: Validation

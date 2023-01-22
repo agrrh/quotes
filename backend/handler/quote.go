@@ -2,96 +2,126 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
-	"github.com/agrrh/quotes/backend/model"
 	"github.com/labstack/echo/v4"
-	"gopkg.in/mgo.v2/bson"
+	"gorm.io/gorm"
+
+	"github.com/agrrh/quotes/backend/model"
 )
 
 var (
-	// TimeNil - empty time value
-	TimeNil = time.Time{}
+	timeNil = time.Time{}
 )
 
 // CreateQuote - create quote object
 func (h *Handler) CreateQuote(c echo.Context) (err error) {
-	q := &model.Quote{
-		ID:      bson.NewObjectId(),
+	quote := &model.Quote{
 		AddedAt: time.Now(),
 	}
 
 	resp := model.MakeResponse()
 
-	err = c.Bind(q)
+	err = c.Bind(quote)
 	if err != nil {
 		resp.Success = false
-		resp.Message = "Error parsing data"
+		resp.Message = fmt.Sprintf("Error parsing data: %s", err)
 		return c.JSON(http.StatusBadRequest, resp)
 	}
 
-	// TODO: Validation
-	// https://echo.labstack.com/cookbook/twitter/
+	dbResult := h.DB.Create(&quote)
 
-	db := h.DB.Clone()
-	defer db.Close()
-
-	// Save quote in database
-	err = db.DB(DBName).C(TableNameQuotes).Insert(q)
-	if err != nil {
+	if dbResult.Error != nil {
 		resp.Success = false
-		resp.Message = "Error during creating Quote"
+		resp.Message = fmt.Sprintf("Error inserting quote: %s", dbResult.Error)
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
 
-	resp.Items = append(resp.Items, q)
+	resp.Data = quote
 
 	return c.JSON(http.StatusCreated, resp)
 }
 
 // FetchQuotes - fetch quotes
 func (h *Handler) FetchQuotes(c echo.Context) (err error) {
-	page, _ := strconv.Atoi(c.QueryParam("page"))
+	skip, _ := strconv.Atoi(c.QueryParam("skip"))
 	limit, _ := strconv.Atoi(c.QueryParam("limit"))
 
 	resp := model.MakeResponse()
 
 	// Defaults
-	if page == 0 {
-		page = 1
+	if skip < 0 {
+		skip = 0
 	}
-	if limit == 0 {
+	if limit < 1 || limit > 20 {
 		limit = 20
 	}
 
-	// Retrieve quotes from database
-	quotes := []*model.Quote{}
-	db := h.DB.Clone()
+	var quotes []interface{}
 
-	err = db.DB(DBName).C(TableNameQuotes).
-		Find(
-			bson.M{"approved_at": bson.M{"$ne": TimeNil}},
-		).
-		Sort("added_at").
-		Skip((page - 1) * limit).
+	// Retrieve quotes from database
+
+	// NOTE: Default db.Find() passes slice of pointers which is not suitable for echo c.JSON() Response
+	//	So here I iterate over records to form an array beforehand
+
+	rows, err := h.DB.Model(&model.Quote{}).
+		Where("approved_at <> ?", timeNil).
+		Order("approved_at").
+		Offset(skip).
 		Limit(limit).
-		All(&quotes)
+		Rows()
+	defer rows.Close()
+
 	if err != nil {
 		resp.Success = false
-		resp.Message = "Error during creating Quote"
+		resp.Message = fmt.Sprintf("Error fetching quotes: %s", err)
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
-	defer db.Close()
 
-	quotesPointers := make([]interface{}, len(quotes))
-	for i, v := range quotes {
-		quotesPointers[i] = &v
+	for rows.Next() {
+		var quote model.Quote
+		h.DB.ScanRows(rows, &quote) // Row to struct
+		quotes = append(quotes, quote)
 	}
 
-	resp.Items = quotesPointers
-	resp.Count = len(quotesPointers)
+	resp.Items = quotes
+	resp.Count = len(quotes)
+
+	if resp.Count == 0 {
+		resp.Message = "Empty quotes list"
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+// FetchQuote - fetch single quote
+func (h *Handler) FetchQuote(c echo.Context) (err error) {
+	id := c.Param("id")
+
+	resp := model.MakeResponse()
+
+	var quote model.Quote
+
+	dbResult := h.DB.
+		Where("approved_at <> ?", timeNil).
+		First(&quote, id)
+
+	if dbResult.Error != nil {
+		resp.Success = false
+
+		if dbResult.Error == gorm.ErrRecordNotFound {
+			resp.Message = fmt.Sprintf("Quote not found")
+			return c.JSON(http.StatusNotFound, resp)
+		}
+
+		resp.Message = fmt.Sprintf("Error fetching quote: %s", dbResult.Error)
+		return c.JSON(http.StatusInternalServerError, resp)
+	}
+
+	resp.Data = quote
 
 	return c.JSON(http.StatusOK, resp)
 }
@@ -102,32 +132,26 @@ func (h *Handler) ApproveQuote(c echo.Context) (err error) {
 
 	resp := model.MakeResponse()
 
-	qSeek := bson.M{"_id": bson.ObjectIdHex(id)}
+	var quote model.Quote
 
-	db := h.DB.Clone()
-	defer db.Close()
+	dbResult := h.DB.
+		First(&quote, id)
 
-	q := &model.Quote{}
-	err = db.DB(DBName).C(TableNameQuotes).
-		Find(qSeek).
-		One(&q)
-	if err != nil {
+	if dbResult.Error != nil {
 		resp.Success = false
-		resp.Message = "Could not find Quote"
-		return c.JSON(http.StatusNotFound, resp)
-	}
 
-	q.ApprovedAt = time.Now()
+		if dbResult.Error == gorm.ErrRecordNotFound {
+			resp.Message = fmt.Sprintf("Quote not found")
+			return c.JSON(http.StatusNotFound, resp)
+		}
 
-	// Approve quote in database
-	err = db.DB(DBName).C(TableNameQuotes).Update(qSeek, q)
-	if err != nil {
-		resp.Success = false
-		resp.Message = "Could not approve Quote"
+		resp.Message = fmt.Sprintf("Error approving quote: %s", dbResult.Error)
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
 
-	resp.Items = append(resp.Items, q)
+	h.DB.Model(&quote).Update("approved_at", time.Now())
+
+	resp.Data = quote
 
 	return c.JSON(http.StatusOK, resp)
 }
@@ -138,32 +162,26 @@ func (h *Handler) DenyQuote(c echo.Context) (err error) {
 
 	resp := model.MakeResponse()
 
-	qSeek := bson.M{"_id": bson.ObjectIdHex(id)}
+	var quote model.Quote
 
-	db := h.DB.Clone()
-	defer db.Close()
+	dbResult := h.DB.
+		First(&quote, id)
 
-	q := &model.Quote{}
-	err = db.DB(DBName).C(TableNameQuotes).
-		Find(qSeek).
-		One(&q)
-	if err != nil {
+	if dbResult.Error != nil {
 		resp.Success = false
-		resp.Message = "Could not find Quote"
-		return c.JSON(http.StatusNotFound, resp)
-	}
 
-	q.ApprovedAt = TimeNil
+		if dbResult.Error == gorm.ErrRecordNotFound {
+			resp.Message = fmt.Sprintf("Quote not found")
+			return c.JSON(http.StatusNotFound, resp)
+		}
 
-	// Approve quote in database
-	err = db.DB(DBName).C(TableNameQuotes).Update(qSeek, q)
-	if err != nil {
-		resp.Success = false
-		resp.Message = "Could not deny Quote"
+		resp.Message = fmt.Sprintf("Error denying quote: %s", dbResult.Error)
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
 
-	resp.Items = append(resp.Items, q)
+	h.DB.Model(&quote).Update("approved_at", timeNil)
+
+	resp.Data = quote
 
 	return c.JSON(http.StatusOK, resp)
 }
@@ -174,15 +192,26 @@ func (h *Handler) DeleteQuote(c echo.Context) (err error) {
 
 	resp := model.MakeResponse()
 
-	db := h.DB.Clone()
-	defer db.Close()
+	var quote model.Quote
 
-	err = db.DB(DBName).C(TableNameQuotes).RemoveId(id)
-	if err != nil {
+	dbResult := h.DB.
+		First(&quote, id)
+
+	if dbResult.Error != nil {
 		resp.Success = false
-		resp.Message = "Could not remove Quote"
+
+		if dbResult.Error == gorm.ErrRecordNotFound {
+			resp.Message = fmt.Sprintf("Quote not found")
+			return c.JSON(http.StatusNotFound, resp)
+		}
+
+		resp.Message = fmt.Sprintf("Error deleting quote: %s", dbResult.Error)
 		return c.JSON(http.StatusInternalServerError, resp)
 	}
+
+	h.DB.Where("id = ?", id).Delete(&quote)
+
+	resp.Data = quote
 
 	return c.JSON(http.StatusOK, resp)
 }
