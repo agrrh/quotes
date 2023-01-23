@@ -1,16 +1,25 @@
-FROM python:3.10-alpine
+FROM golang:1.19-alpine as builder
 
 WORKDIR /app
 
-RUN apk add --no-cache --virtual .build-deps \
-  gcc \
-  musl-dev
+COPY go.mod ./
+COPY go.sum ./
 
-COPY ./requirements.txt ./
-RUN pip install -r requirements.txt
-
-RUN apk del .build-deps
+RUN go mod download
 
 COPY ./ ./
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "3000"]
+RUN go build -o ./app
+RUN chmod +x ./app
+
+# ---
+
+FROM alpine:3.17
+
+WORKDIR /app
+
+COPY --from=builder /app/app ./
+
+EXPOSE 8081
+
+CMD ["./app"]

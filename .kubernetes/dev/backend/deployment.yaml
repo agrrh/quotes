@@ -30,9 +30,16 @@ spec:
 
           # TODO: Move to secrets
           env:
-            - name: APP_DB_URL
-              value: "postgresql://quotes:password@postgres/quotes"
+            - name: APP_DB_DSN
+              value: "quotes:CRK9aI5LvfS1ryYE@tcp(database:3306)/quotes?charset=utf8mb4&parseTime=True&loc=Local"
 
           ports:
             - name: http
-              containerPort: 3000
+              containerPort: 8081
+
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 5

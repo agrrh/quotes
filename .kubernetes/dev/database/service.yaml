@@ -4,15 +4,15 @@ apiVersion: v1
 kind: Service
 
 metadata:
-  name: postgres
+  name: database
   namespace: quotes-dev
 
 spec:
   selector:
     app: quotes
-    component: postgres
+    component: database
   ports:
-    - name: postgres
+    - name: database
       protocol: TCP
-      port: 5432
-      targetPort: 5432
+      port: 3306
+      targetPort: 3306

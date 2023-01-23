@@ -11,8 +11,8 @@ build:
     - image: agrrh/quotes-backend
       context: backend
 
-    - image: agrrh/quotes-frontend
-      context: frontend
+    # - image: agrrh/quotes-frontend
+    #   context: frontend
 
   tagPolicy:
     gitCommit:
@@ -21,19 +21,19 @@ build:
 manifests:
   rawYaml:
     - .kubernetes/dev/namespace.yaml
-    - .kubernetes/dev/postgres/*
+    - .kubernetes/dev/database/*
     - .kubernetes/dev/backend/*
-    - .kubernetes/dev/frontend/*
+    # - .kubernetes/dev/frontend/*
 
 deploy:
   kubeContext: bugry1.spb.agrrh.com
 
 portForward:
-  - resourceType: Service
-    resourceName: frontend
-    namespace: quotes-dev
-    port: http
-    localPort: 8080
+  # - resourceType: Service
+  #   resourceName: frontend
+  #   namespace: quotes-dev
+  #   port: http
+  #   localPort: 8080
 
   - resourceType: Service
     resourceName: backend

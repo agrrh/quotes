@@ -2,7 +2,7 @@
 
 kind: pipeline
 type: docker
-name: lint
+name: backend-pr
 
 trigger:
   event:
@@ -10,23 +10,14 @@ trigger:
 
 steps:
   - name: lint
-    image: agrrh/cider:0.2.0
+    image: ghcr.io/mgechev/revive:1.2.4
     commands:
-      - go-task lint
+      - cd ./backend
+      - revive -set_exit_status ./
 
----
-
-kind: pipeline
-type: docker
-name: build-pr
-
-trigger:
-  event:
-    - pull_request
-
-steps:
-  - name: backend
-    depends_on: []
+  - name: build
+    depends_on:
+      - lint-backend
     image: plugins/docker
     settings:
       purge: false
@@ -36,13 +27,31 @@ steps:
       password:
         from_secret: docker_password
       repo: agrrh/quotes-backend
-      # auto_tag: true
       tags:
-        - latest
+        - ${DRONE_COMMIT_BRANCH}
         - ${DRONE_COMMIT_SHA}
 
-  - name: frontend
-    depends_on: []
+---
+
+kind: pipeline
+type: docker
+name: frontend-pr
+
+trigger:
+  event:
+    - pull_request
+
+steps:
+  - name: lint
+    image: ghcr.io/tmknom/dockerfiles/prettier
+    commands:
+      - cd ./frontend
+      - prettier --plugin-search-dir . --check
+      # - eslint .
+
+  - name: build
+    depends_on:
+      - lint
     image: plugins/docker
     settings:
       purge: false
@@ -52,16 +61,15 @@ steps:
       password:
         from_secret: docker_password
       repo: agrrh/quotes-frontend
-      # auto_tag: true
       tags:
-        - latest
+        - ${DRONE_COMMIT_BRANCH}
         - ${DRONE_COMMIT_SHA}
 
 ---
 
 kind: pipeline
 type: docker
-name: build-push-or-tag
+name: master
 
 trigger:
   event:
@@ -70,8 +78,7 @@ trigger:
     - tag
 
 steps:
-  - name: backend
-    depends_on: []
+  - name: build-backend
     image: plugins/docker
     settings:
       purge: false
@@ -83,8 +90,7 @@ steps:
       repo: agrrh/quotes-backend
       auto_tag: true
 
-  - name: frontend
-    depends_on: []
+  - name: build-frontend
     image: plugins/docker
     settings:
       purge: false
@@ -95,38 +101,3 @@ steps:
         from_secret: docker_password
       repo: agrrh/quotes-frontend
       auto_tag: true
-
----
-
-kind: pipeline
-type: docker
-name: test
-
-trigger:
-  event:
-    - pull_request
-
-depends_on:
-  - build-pr
-
-steps:
-  - name: application
-    detach: true
-    image: agrrh/quotes-backend:${DRONE_COMMIT_SHA}
-    environment:
-      APP_DB_URL: "postgresql://quotes:password@postgres/quotes"
-
-  - name: test
-    image: agrrh/cider:0.2.0
-    environment:
-      APP_URL: "http://application:3000"
-    commands:
-      - go-task test
-
-services:
-  - name: postgres
-    image: postgres:14.5
-    environment:
-      POSTGRES_USER: quotes
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: quotes
