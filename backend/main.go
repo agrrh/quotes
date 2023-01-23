@@ -23,6 +23,8 @@ func main() {
 	// Echo instance
 	e := echo.New()
 
+	e.Pre(middleware.RemoveTrailingSlash())
+
 	// TODO: Attach JWT:
 	// 	https://github.com/labstack/echox/blob/master/cookbook/twitter/server.go
 
