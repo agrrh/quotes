@@ -1,0 +1,45 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: database
+  namespace: quotes-dev
+  labels:
+    app: quotes
+    component: database
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: quotes
+      component: database
+
+  template:
+    metadata:
+      labels:
+        app: quotes
+        component: database
+
+    spec:
+      containers:
+        - name: app
+          image: mariadb:10
+
+          env:
+            - name: MYSQL_RANDOM_ROOT_PASSWORD
+              value: "yes"
+            - name: MYSQL_DATABASE
+              value: "quotes"
+            - name: MYSQL_USER
+              value: "quotes"
+            # TODO: Move to secrets
+            - name: MYSQL_PASSWORD
+              value: "CRK9aI5LvfS1ryYE"
+
+          ports:
+            - containerPort: 3306
+
+          # TODO: Add volume
