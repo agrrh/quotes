@@ -12,7 +12,7 @@ spec:
     app: quotes
     component: database
   ports:
-    - name: postgres
+    - name: database
       protocol: TCP
       port: 3306
       targetPort: 3306
